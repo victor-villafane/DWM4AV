@@ -1,0 +1,72 @@
+import { useEffect, useState } from "react";
+import { Link, useParams } from "react-router";
+
+const Detail = () => {
+    const [pokemon, setPokemon] = useState({})
+    const [loading, setLoading] = useState(true)
+
+    const { idPokemon } = useParams();
+
+    // useEffect(() => {
+    //     fetch("http://localhost:2026/api/pokemons/" + idPokemon)
+    //         .then(res => res.json())
+    //         .then(async pokemon => {
+    //             fetch( pokemon.url )
+    //                 .then( res => res.json()  )
+    //                 .then( poke => setPokemon(poke) )
+    //                 .catch( err => console.error(err) )
+    //         })
+    //         .catch(err => console.error(err))
+    //         .finally(() => setLoading(false))
+    // }, [])
+
+    const getPokemon = async () => {
+        try {
+            const res = await fetch("http://localhost:2026/api/pokemons/" + idPokemon)
+            const pokemon = await res.json()
+
+            const pokeRes = await fetch(pokemon.url)
+            const pokeData = await pokeRes.json()
+
+            setPokemon(pokeData)
+        } catch (error) {
+            console.error(err)
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    useEffect(() => {
+        getPokemon()
+    }, [])
+
+    if (loading) return (
+        <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>)
+
+    return (
+        <div className="container mt-4">
+            <div className="card p-3 text-center">
+                <h2 className="text-capitalize">
+                    {pokemon.name}
+                </h2>
+
+                <img src={pokemon.sprites.front_default} alt={pokemon.name} className="mx-auto" style={{ width: "300px" }} />
+
+                <p className="mt-3" >
+                    <strong>ID: </strong> {pokemon.id}
+                </p>
+                <p className="mt-3" >
+                    <strong>Altura: </strong> {pokemon.height}
+                </p>
+                <p className="mt-3" >
+                    <strong>Peso: </strong> {pokemon.weight}
+                </p>
+            </div>
+            <Link to="/">Volver</Link>
+        </div>
+    )
+}
+
+export default Detail
