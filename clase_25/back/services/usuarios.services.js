@@ -25,16 +25,19 @@ export async function registerUser(usuario) {
 }
 
 export async function loginUser(usuario) {
+    console.log("Intentando conectar a mongo db")
     await client.connect()
+    console.log("Intentando buscar el usuario")
     const existe = await db.collection("usuarios").findOne({ email: usuario.email })
     if (!existe) throw new Error("Usuario/Contraseña incorrectos")
+    console.log("el usuario existe")
     const esValido = await bcryptjs.compare(usuario.password, existe.password)
-
+    console.log("Encriptado!")
     const token = createToken({
         email: existe.email,
         age: existe?.age,
         rol: existe?.rol || "user"
     })
-
+    
     return { ...usuario, password: undefined, passwordConfirm: undefined, token }
 }
