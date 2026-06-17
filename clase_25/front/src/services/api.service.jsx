@@ -6,7 +6,7 @@ export function useApi() {
     const navigate = useNavigate()
 
     const call = (uri, method, body) => {
-        return fetch("http://localhost:2026/api" + uri, {
+        return fetch("https://dwm4av.onrender.com/api" + uri, {
             method: method,
             headers: {
                 "Content-Type": "application/json",
