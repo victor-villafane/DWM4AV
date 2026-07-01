@@ -25,7 +25,8 @@ export function recuperarCuenta(mail){
         text: "Hace click en el siguiente link: " + resetLink,
         html: `<p>Hace click en el siguiente link: <a href='${resetLink}' >recuperar</a></p>`
     }
-
+    console.log("Intento de enviar el mail")
+    console.log(mailOptions)
     transporter.sendMail(mailOptions, (error, info) => {
         if( error ){
             console.log("No se pudo enviar", error)
